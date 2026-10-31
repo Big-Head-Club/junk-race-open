@@ -40,4 +40,9 @@ Karts, track pieces and props: Kenney (kenney.nl), CC0. Music: Abstraction (abst
 Physics: Rapier (Dimforge). Rendering: three.js. Fonts: Kenney Future (CC0), Space Grotesk (OFL).
 Full list in `credits.json`.
 
+## Licence
+
+The code is MIT (see `LICENSE`). The models, music and fonts keep their own licences, listed above and in
+`credits.json`.
+
 This copy is refreshed from the game's own repo, so pull requests here will not be merged back by hand.

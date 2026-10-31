@@ -2,6 +2,7 @@
   "name": "junk-race",
   "version": "0.1.0",
   "private": true,
+  "license": "MIT",
   "type": "module",
   "description": "Prototype: low poly sloppy kart racing with wild weapons and a snap-to-grid track editor.",
   "scripts": {
