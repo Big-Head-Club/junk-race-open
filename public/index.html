@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<style id="phone-rules">
+/* PHONE RULES (mobile pass 2026-10-18). A game, not a document. First in the head so the game's own CSS wins.
+   touch-action: manipulation = no double-tap zoom (every plain button had it); a board or canvas that handles
+   its own gestures sets touch-action: none itself. 16px floor on inputs: iOS zooms the page into anything smaller
+   and leaves it zoomed. No long-press selection or copy sheet on the game; inputs stay selectable. */
+* { touch-action: manipulation; }
+html { -webkit-text-size-adjust: 100%; }
+body { -webkit-tap-highlight-color: transparent; overscroll-behavior: none; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
+input, textarea, [contenteditable] { -webkit-user-select: text; user-select: text; }
+input, select, textarea { font-size: max(16px, 1em); }
+</style>
+<script>/* iOS ignores user-scalable=no; this is what stops a pinch from zooming the page. And iOS zooms the page into any
+input under 16px the moment it is focused: the size is bumped on the press, before focus, where the game's own CSS left it small. */
+addEventListener("gesturestart", (e) => e.preventDefault(), { passive: false });
+addEventListener("pointerdown", (e) => { const t = e.target && e.target.closest && e.target.closest("input, select, textarea"); if (t && parseFloat(getComputedStyle(t).fontSize) < 16) t.style.fontSize = "16px"; }, true);</script>
+<title>Junk Race</title>
+<meta name="description" content="Sloppy little karts, wild weapons and slow bad guys. Race today's track and send your ghost to your friends.">
+<meta property="og:title" content="Junk Race">
+<meta property="og:description" content="Race today's track and send your ghost to your friends.">
+<meta property="og:image" content="https://junkrace.xyz/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:url" content="https://junkrace.xyz/">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="stylesheet" href="/style.css">
+<script>window.tally = window.tally || function () { (window.tally.q = window.tally.q || []).push(arguments) }</script>
+<script defer src="https://tally-production-afae.up.railway.app/t.js"></script>
+<script async src="https://gameaday.xyz/gameaday.js" onload="(window.__gadQ || []).forEach(f => { try { f() } catch (e) {} }); window.__gadQ = { push: f => { try { f() } catch (e) {} } }"></script>
+<script type="importmap">{ "imports": { "three": "/vendor/three.module.js", "@dimforge/rapier3d-compat": "/vendor/rapier.mjs" } }</script>
+</head>
+<body>
+<canvas id="stage"></canvas>
+
+<section id="home" class="screen on">
+  <h1 class="title">JUNK<span>RACE</span></h1>
+  <div class="watch" id="watching"></div>
+  <div class="foot">
+  <div class="bar">
+  <div class="menu">
+    <div class="row" id="modeChips"></div>
+    <div class="info" id="dailyInfo"></div>
+    <div class="label" id="trackLabel">Track</div>
+    <div class="row" id="trackChips"></div>
+    <div class="label" id="skillLabel">Bots</div>
+    <div class="row" id="skillChips"></div>
+    <div class="row">
+      <button class="btn" id="goRace">Race</button>
+      <button class="btn ghost" id="goBuild">Build a track</button>
+    </div>
+  </div>
+  <div class="side"><button class="btn ghost small" id="goCredits">Credits</button></div>
+  </div>
+  <div class="shelf" id="shelf"></div>
+  </div>
+</section>
+<script>/* the door is up before the 3D loads; a Race or Credits tap before then waits for the game */
+for (const id of ["goRace", "goCredits"]) document.getElementById(id).onclick = () => { window.__early = id; if (id === "goRace") { tally("start", { early: 1 }); tally.flush && tally.flush() } }</script>
+
+<section id="hud" class="screen">
+  <div class="place" id="place"></div>
+  <div class="lap" id="lap">LAP 1/3</div>
+  <div class="slot"><div class="box empty" id="slotBox"></div><div class="name" id="slotName"></div></div>
+  <div class="news" id="news"></div>
+  <div class="count" id="count"></div>
+  <div class="wrong" id="wrong">Wrong way</div>
+  <div class="prompts" id="prompts"></div>
+  <div class="touch" id="touch">
+    <div class="stickzone" id="stickZone"><div class="stick" id="stick"><div class="knob" id="knob"></div></div></div>
+    <button class="tb fire" id="tFire"><span class="ico" id="tFireIcon"></span><span>Fire</span></button>
+    <button class="tb drift" id="tDrift">Drift</button>
+    <button class="tb back" id="tBack">Back</button>
+    <div class="ttop"><button class="tb small" id="tReset">Reset</button><button class="tb small" id="tPause">Pause</button></div>
+  </div>
+</section>
+
+<section id="pause" class="screen">
+  <div class="veil sheet"><div class="panel">
+    <h2>PAUSED</h2>
+    <div class="row"><button class="btn" id="resume">Resume</button><button class="btn ghost" id="restart">Restart</button><button class="btn ghost" id="quit">Quit</button></div>
+  </div></div>
+</section>
+
+<section id="results" class="screen">
+  <div class="veil sheet"><div class="panel">
+    <h2 id="resultTitle">1ST!</h2>
+    <div class="flag" id="resultFlag"></div>
+    <div class="standings" id="standings"></div>
+    <div class="row submit" id="submitRow"><input id="runName" maxlength="14" placeholder="Your name" autocomplete="off" spellcheck="false"><button class="btn" id="submitRun">Submit</button></div>
+    <div class="msg" id="runMsg"></div>
+    <div class="row"><button class="btn" id="ok">OK</button><button class="btn ghost" id="again">Race again</button><button class="btn ghost" id="share">Share</button></div>
+    <div class="endpanel" id="endpanel"></div>
+  </div></div>
+</section>
+
+<section id="credits" class="screen">
+  <div class="veil sheet"><div class="panel credits">
+    <h2>CREDITS</h2>
+    <p>Karts, track pieces, furniture, golf balls and props: Kenney (kenney.nl), CC0. Racing Kit, Car Kit, Toy Car Kit, Graveyard Kit, Furniture Kit, Minigolf Kit, Weapon Pack.</p>
+    <p>Sound effects: Sonniss GDC bundles (3maze, Shapeforms, Sounds Great, fascinatedsound, Sound Spark LLC, Cinematic Sound Design, Chris Logsdon, Epic Stock Media).</p>
+    <p>Music: Abstraction (Tallbeard Studios), "Three Red Hearts Box Jump" and "Have A Great Summer".</p>
+    <p>Physics: Rapier (Dimforge). Rendering: three.js by mrdoob and contributors. Fonts: Kenney Future, Space Grotesk.</p>
+    <div class="row"><button class="btn" id="creditsOk">OK</button></div>
+  </div></div>
+</section>
+
+<script type="module" src="/game.mjs"></script>
+</body>
+</html>

@@ -1,0 +1,18 @@
+#bar { position: fixed; left: 0; right: 0; top: 0; display: flex; align-items: center; gap: 14px; padding: var(--safe-t) var(--safe-r) 12px var(--safe-l); background: var(--field); box-shadow: 0 6px 0 var(--field2); z-index: 2; flex-wrap: wrap; }
+#bar .right { margin-left: auto; }
+#name { font-family: KFuture; font-size: 22px; color: var(--ink); background: var(--cream); border: 0; border-radius: 8px; padding: 8px 12px; width: 10em; }
+#name:focus { outline: 4px solid var(--act); }
+.laps { display: flex; align-items: center; gap: 8px; }
+#status { font-weight: 700; font-size: 17px; padding: 8px 14px; border-radius: 8px; background: var(--ink); color: var(--act); }
+#status.bad { background: var(--hot); color: var(--cream); }
+#palette { position: fixed; left: 0; top: var(--bar, 86px); bottom: 0; width: 248px; overflow-y: auto; padding: 14px var(--safe-l); background: color-mix(in srgb, var(--field2) 92%, transparent); display: flex; flex-direction: column; gap: 10px; z-index: 1; }
+#palette .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.tile { background: var(--cream); border-radius: 10px; padding: 4px 4px 6px; display: flex; flex-direction: column; align-items: center; gap: 2px; color: var(--ink); font-weight: 700; font-size: 13px; box-shadow: 0 4px 0 #0003; }
+.tile img { width: 100%; aspect-ratio: 1; object-fit: contain; }
+.tile[aria-pressed="true"] { background: var(--act); outline: 3px solid var(--ink); }
+.tile:focus-visible { outline: 3px solid var(--act); }
+.tile .glyph { font-family: KFuture; font-size: 34px; height: 1.9em; display: grid; place-items: center; }
+#help { position: fixed; right: var(--safe-r); bottom: var(--safe-b); font-weight: 700; font-size: 15px; color: var(--cream); text-shadow: 0 2px 0 #0008; display: flex; gap: 16px; flex-wrap: wrap; justify-content: flex-end; }
+#toast { position: fixed; left: 50%; bottom: 70px; transform: translateX(-50%); font-family: KFuture; font-size: 22px; background: var(--ink); color: var(--act); padding: 10px 18px; border-radius: 10px; display: none; z-index: 3; text-align: center; }
+#toast.on { display: block; }
+#toast input { font: 700 18px SG; width: 22em; margin-top: 8px; padding: 6px 10px; border-radius: 6px; border: 0; }

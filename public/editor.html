@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<style id="phone-rules">
+/* PHONE RULES (mobile pass 2026-10-18). A game, not a document. First in the head so the game's own CSS wins.
+   touch-action: manipulation = no double-tap zoom (every plain button had it); a board or canvas that handles
+   its own gestures sets touch-action: none itself. 16px floor on inputs: iOS zooms the page into anything smaller
+   and leaves it zoomed. No long-press selection or copy sheet on the game; inputs stay selectable. */
+* { touch-action: manipulation; }
+html { -webkit-text-size-adjust: 100%; }
+body { -webkit-tap-highlight-color: transparent; overscroll-behavior: none; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
+input, textarea, [contenteditable] { -webkit-user-select: text; user-select: text; }
+input, select, textarea { font-size: max(16px, 1em); }
+</style>
+<script>/* iOS ignores user-scalable=no; this is what stops a pinch from zooming the page. And iOS zooms the page into any
+input under 16px the moment it is focused: the size is bumped on the press, before focus, where the game's own CSS left it small. */
+addEventListener("gesturestart", (e) => e.preventDefault(), { passive: false });
+addEventListener("pointerdown", (e) => { const t = e.target && e.target.closest && e.target.closest("input, select, textarea"); if (t && parseFloat(getComputedStyle(t).fontSize) < 16) t.style.fontSize = "16px"; }, true);</script>
+<title>Junk Race: build a track</title>
+<link rel="stylesheet" href="/style.css">
+<link rel="stylesheet" href="/editor.css">
+<script type="importmap">{ "imports": { "three": "/vendor/three.module.js", "@dimforge/rapier3d-compat": "/vendor/rapier.mjs" } }</script>
+</head>
+<body>
+<canvas id="stage"></canvas>
+<header id="bar">
+  <button class="btn ghost small" id="back">Home</button>
+  <input id="name" maxlength="28" spellcheck="false" aria-label="Track name">
+  <div class="laps"><span class="label">Laps</span><div class="row" id="laps"></div></div>
+  <div id="status"></div>
+  <div class="row right">
+    <button class="btn ghost small" id="undo">Undo</button>
+    <button class="btn ghost small" id="clear">New</button>
+    <button class="btn ghost small" id="share">Share</button>
+    <button class="btn small" id="test">Test drive</button>
+  </div>
+</header>
+<aside id="palette">
+  <div class="label">Road</div><div class="grid" id="roads"></div>
+  <div class="label">Stuff</div><div class="grid" id="props"></div>
+  <div class="label">Tools</div><div class="grid" id="tools"></div>
+</aside>
+<div id="help"></div>
+<div id="toast"></div>
+<script type="module" src="/editor.mjs"></script>
+</body>
+</html>

@@ -1,0 +1,18 @@
+{
+  "people": [
+    { "what": "Design and direction", "who": "Mack Flavelle" },
+    { "what": "Built with", "who": "Claude Code (Anthropic)" }
+  ],
+  "assets": [
+    { "what": "Karts, track pieces, props, graveyard bad guys, furniture, golf balls, weapons", "who": "Kenney", "pack": "Kenney all in 1 3.7.0 (Racing Kit, Car Kit, Toy Car Kit, Graveyard Kit, Furniture Kit, Minigolf Kit, Weapon Pack)", "licence": "CC0", "where": "https://kenney.nl" },
+    { "what": "Sound effects", "who": "3maze, Shapeforms, Sounds Great, fascinatedsound, Sound Spark LLC, Cinematic Sound Design, Chris Logsdon, Epic Stock Media", "pack": "Sonniss GDC Game Audio Bundles", "licence": "Sonniss GDC licence", "where": "https://sonniss.com/gameaudiogdc" },
+    { "what": "Music: Three Red Hearts Box Jump, Have A Great Summer", "who": "Abstraction (Tallbeard Studios)", "licence": "CC0", "where": "https://abstractionmusic.com" },
+    { "what": "Display typeface", "who": "Kenney", "pack": "Kenney Future", "licence": "CC0", "where": "https://kenney.nl/assets/kenney-fonts" },
+    { "what": "Typeface", "who": "Florian Karsten", "pack": "Space Grotesk", "licence": "OFL", "where": "https://fonts.google.com/specimen/Space+Grotesk" }
+  ],
+  "code": [
+    { "what": "Rendering", "who": "three.js by mrdoob and contributors", "pack": "three.js", "licence": "MIT" },
+    { "what": "Physics", "who": "Dimforge", "pack": "Rapier", "licence": "Apache-2.0" },
+    { "what": "Runtime", "who": "Bun", "licence": "MIT" }
+  ]
+}
